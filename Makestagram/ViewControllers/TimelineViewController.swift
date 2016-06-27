@@ -27,7 +27,8 @@ class TimelineViewController: UIViewController, TimelineComponentTarget {
                 let post = Post()
                 post.image.value = image!
                 post.uploadPost()
-            
+                print("post uploaded")
+                self.tableView.reloadData()
         }
     }
     
@@ -43,7 +44,6 @@ class TimelineViewController: UIViewController, TimelineComponentTarget {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        timelineComponent = TimelineComponent(target: self)
         timelineComponent.loadInitialIfRequired()
     }
     
@@ -86,6 +86,8 @@ extension TimelineViewController: UITableViewDataSource {
         
         let post = timelineComponent.content[indexPath.row]
         post.downloadImage()
+        print("image downloaded")
+        
         post.fetchLikes()
         cell.post = post
         
