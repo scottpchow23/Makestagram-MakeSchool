@@ -28,6 +28,10 @@ class PostTableViewCell: UITableViewCell {
             postDisposable?.dispose()
             likeDisposable?.dispose()
             
+            if let oldValue = oldValue where oldValue != post{
+                oldValue.image.value = nil
+            }
+            
             if let post = post {
                 
                 postDisposable = post.image.bindTo(postImageView.bnd_image)

@@ -9,6 +9,7 @@
 import UIKit
 import Parse
 import Bond
+import ConvenienceKit
 
 class Post: PFObject, PFSubclassing {
     
@@ -17,6 +18,7 @@ class Post: PFObject, PFSubclassing {
     var image: Observable<UIImage?> = Observable(nil)
     var photoUploadTask: UIBackgroundTaskIdentifier?
     var likes: Observable<[PFUser]?> = Observable(nil)
+    static var imageCache: NSCacheSwift<String, UIImage>!
     
     func uploadPost() {
         
@@ -40,6 +42,8 @@ class Post: PFObject, PFSubclassing {
     
     func downloadImage() {
         
+        image.value = Post.imageCache[self.imageFile!.name]
+        
         if (image.value == nil) {
             
             imageFile?.getDataInBackgroundWithBlock { (data: NSData?, error: NSError?) -> Void in
@@ -48,6 +52,7 @@ class Post: PFObject, PFSubclassing {
                     
                     let image = UIImage(data: data, scale: 1.0)!
                     self.image.value = image
+                    Post.imageCache[self.imageFile!.name] = image
                 }
             }
         }
@@ -102,6 +107,8 @@ class Post: PFObject, PFSubclassing {
         var onceToken: dispatch_once_t = 0;
         dispatch_once(&onceToken) {
             self.registerSubclass()
+            
+            Post.imageCache = NSCacheSwift<String, UIImage>()
         }
     }
 }
