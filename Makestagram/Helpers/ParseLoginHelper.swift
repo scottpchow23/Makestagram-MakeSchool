@@ -23,10 +23,10 @@ class ParseLoginHelper : NSObject {
   static let usernameNotFoundLocalizedDescription = "Could not retrieve Facebook username"
 
   let callback: ParseLoginHelperCallback
-  
-  init(callback: ParseLoginHelperCallback) {
-    self.callback = callback
-  }
+    
+    init(callback: ParseLoginHelperCallback) {
+        self.callback = callback
+    }
 }
 
 extension ParseLoginHelper : PFLogInViewControllerDelegate {
