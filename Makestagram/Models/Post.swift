@@ -35,6 +35,9 @@ class Post: PFObject, PFSubclassing {
             }
             
             saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+                if let error = error {
+                    ErrorHandling.defaultErrorHandler(error)
+                }
                 UIApplication.sharedApplication().endBackgroundTask(self.photoUploadTask!)
             }
         }
@@ -47,7 +50,9 @@ class Post: PFObject, PFSubclassing {
         if (image.value == nil) {
             
             imageFile?.getDataInBackgroundWithBlock { (data: NSData?, error: NSError?) -> Void in
-                
+                if let error = error {
+                    ErrorHandling.defaultErrorHandler(error)
+                }
                 if let data = data {
                     
                     let image = UIImage(data: data, scale: 1.0)!
@@ -65,7 +70,9 @@ class Post: PFObject, PFSubclassing {
         }
         
         ParseHelper.likesForPost(self, completionBlock: { (likes: [PFObject]?, error: NSError?) -> Void in
-            
+            if let error = error {
+                ErrorHandling.defaultErrorHandler(error)
+            }
             let validLikes = likes?.filter { like in like[ParseHelper.ParseLikeFromUser] != nil }
             self.likes.value = validLikes?.map { like in
                 let fromUser = like[ParseHelper.ParseLikeFromUser] as! PFUser
